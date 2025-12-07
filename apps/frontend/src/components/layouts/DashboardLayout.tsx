@@ -22,6 +22,11 @@ const navigation = [
     href: '/purchase-frequency',
     icon: BarChart3,
   },
+  {
+    name: '고객 구매 현황',
+    href: '/customer-purchases',
+    icon: Users,
+  },
 ];
 
 export function DashboardLayout() {

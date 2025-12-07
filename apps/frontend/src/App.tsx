@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { DashboardLayout } from './components/layouts/DashboardLayout';
 import { PurchaseFrequencyPage } from './pages/PurchaseFrequencyPage';
 import './App.css';
+import { CustomersPage } from './pages/CustomersPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,6 +22,7 @@ function App() {
           <Route element={<DashboardLayout />}>
             <Route path="/" element={<Navigate to="/purchase-frequency" replace />} />
             <Route path="/purchase-frequency" element={<PurchaseFrequencyPage />} />
+            <Route path="/customer-purchases" element={<CustomersPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
