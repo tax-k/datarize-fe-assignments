@@ -28,6 +28,7 @@ export interface CustomerStats {
 export interface PurchaseFrequency {
   range: string; // 예: "0 - 20000"
   count: number;
+  revenue?: number;
 }
 
 export interface CustomerPurchaseDetail {

@@ -356,8 +356,10 @@ type HighlightItemProps<T extends React.ElementType = "div"> =
 		forceUpdateBounds?: boolean;
 	};
 
-function HighlightItem<T extends React.ElementType>({
-	ref,
+const HighlightItem = React.forwardRef<
+	HTMLDivElement,
+	HighlightItemProps<React.ElementType>
+>(function HighlightItem({
 	as,
 	children,
 	id,
@@ -371,7 +373,7 @@ function HighlightItem<T extends React.ElementType>({
 	asChild = false,
 	forceUpdateBounds,
 	...props
-}: HighlightItemProps<T>) {
+}, ref) {
 	const itemId = React.useId();
 	const {
 		activeValue,
@@ -602,7 +604,9 @@ function HighlightItem<T extends React.ElementType>({
 	) : (
 		children
 	);
-}
+});
+
+HighlightItem.displayName = "HighlightItem";
 
 export {
 	Highlight,

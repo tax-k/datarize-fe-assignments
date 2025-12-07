@@ -53,7 +53,11 @@ router.get('/api/purchase-frequency', async (ctx) => {
       { min: 90001, max: 100000 },
     ]
 
-    const frequency = priceRanges.map((range) => ({ range: `${range.min} - ${range.max}`, count: 0 }))
+    const frequency = priceRanges.map((range) => ({ 
+      range: `${range.min} - ${range.max}`, 
+      count: 0,
+      revenue: 0
+    }))
 
     purchases
       .filter((purchase) => {
@@ -69,6 +73,7 @@ router.get('/api/purchase-frequency', async (ctx) => {
           if (range) {
             const rangeIndex = priceRanges.indexOf(range)
             frequency[rangeIndex].count += purchase.quantity
+            frequency[rangeIndex].revenue += productPrice * purchase.quantity
           }
         } else {
           ctx.status = 400
