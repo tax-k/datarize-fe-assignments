@@ -18,6 +18,8 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from '@/components/ui/chart';
+import { formatPriceRange, formatRevenue } from '@/utils/format';
+import { getDateRange } from '@/utils/dateRange';
 
 export function PurchaseFrequencyChart() {
   const [fromDate, setFromDate] = useState<Date | undefined>(undefined);
@@ -27,49 +29,11 @@ export function PurchaseFrequencyChart() {
   const [showRevenue, setShowRevenue] = useState(false); 
   const [isSingleDateMode, setIsSingleDateMode] = useState(false); // NOTE: 단일 날짜 모드 (00:00:00 ~ 23:59:59)
 
-  const formatDateForAPI = (date: Date | undefined): string | undefined => {
-    if (!date) return undefined;
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  };
-
-  const getDateRange = () => {
-    // 단일 날짜 모드 (체크박스 활성): 00:00:00 ~ 23:59:59
-    if (isSingleDateMode) {
-      if (fromDate) {
-        const dateStr = formatDateForAPI(fromDate);
-        return { from: dateStr, to: dateStr };
-      }
-      return { from: undefined, to: undefined };
-    }
-
-    // 기본 모드 (체크박스 비활성): 시작 ~ 종료 사이
-    if (fromDate && toDate) {
-      return {
-        from: formatDateForAPI(fromDate),
-        to: formatDateForAPI(toDate),
-      };
-    }
-
-    // 시작 날짜만 있으면 같은 날짜로 보냄 (백엔드가 하나만 받으면 400이므로)
-    if (fromDate && !toDate) {
-      const dateStr = formatDateForAPI(fromDate);
-      return { from: dateStr, to: dateStr };
-    }
-
-    // 종료 날짜만 있으면 같은 날짜로 보냄 (백엔드가 하나만 받으면 400이므로)
-    if (!fromDate && toDate) {
-      const dateStr = formatDateForAPI(toDate);
-      return { from: dateStr, to: dateStr };
-    }
-
-    // 둘 다 없으면 전체 데이터
-    return { from: undefined, to: undefined };
-  };
-
-  const { from: actualFromDate, to: actualToDate } = getDateRange();
+  const { from: actualFromDate, to: actualToDate } = getDateRange({
+    fromDate,
+    toDate,
+    isSingleDateMode,
+  });
 
   const { data, isLoading, error, refetch } = usePurchaseFrequency({
     from: actualFromDate,
@@ -84,30 +48,6 @@ export function PurchaseFrequencyChart() {
     setFromDate(undefined);
     setToDate(undefined);
     setIsSingleDateMode(false);
-  };
-
-  const formatPriceRange = (range: string): string => {
-    const [min, max] = range.split(' - ').map(Number);
-    
-    const minMan = min / 10000;
-    const maxMan = max / 10000;
-    
-    if (min === 0) {
-      return `~${maxMan.toFixed(0)}만원`;
-    }
-    
-    return `${minMan.toFixed(0)}만~${maxMan.toFixed(0)}만원`;
-  };
-
-  const formatRevenue = (value: number): string => {
-    const eok = value / 100000000;
-    const man = value / 10000;
-    
-    if (eok >= 1) {
-      return `${eok.toFixed(eok >= 10 ? 0 : 1)}억`;
-    }
-    
-    return `${man.toFixed(0)}만`;
   };
 
   const chartConfig = {
