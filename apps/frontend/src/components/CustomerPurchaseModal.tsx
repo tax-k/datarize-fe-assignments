@@ -9,6 +9,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface CustomerPurchaseModalProps {
   customerId: number;
@@ -46,8 +47,21 @@ export function CustomerPurchaseModal({
 
         <ScrollArea className="max-h-[60vh] pr-4">
           {isLoading && (
-            <div className="flex items-center justify-center py-12">
-              <p className="text-muted-foreground">데이터를 불러오는 중...</p>
+            <div className="space-y-4">
+              {Array.from({ length: 4 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="flex items-start gap-4 p-4 border rounded-lg"
+                >
+                  <Skeleton className="w-20 h-20 rounded-md shrink-0" />
+                  <div className="flex-1 min-w-0 space-y-2">
+                    <Skeleton className="h-6 w-32" />
+                    <Skeleton className="h-4 w-24" />
+                    <Skeleton className="h-4 w-16" />
+                  </div>
+                  <Skeleton className="h-6 w-24 shrink-0" />
+                </div>
+              ))}
             </div>
           )}
 

@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Calendar } from '@/components/ui/calendar';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   Popover,
   PopoverContent,
@@ -217,8 +218,25 @@ export function PurchaseFrequencyChart() {
 
       <div className="h-[400px]">
         {isLoading && (
-          <div className="flex items-center justify-center h-full">
-            <p className="text-muted-foreground">데이터를 불러오는 중...</p>
+          <div className="h-full flex flex-col gap-4 p-4">
+            <div className="flex items-end justify-between h-full gap-2">
+              {Array.from({ length: 9 }).map((_, index) => (
+                <div key={index} className="flex-1 flex flex-col items-center gap-2">
+                  <Skeleton 
+                    className="w-full rounded-t-md" 
+                    style={{ 
+                      height: `${Math.random() * 60 + 40}%`,
+                      minHeight: '60px'
+                    }} 
+                  />
+                  <Skeleton className="h-4 w-16" />
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-between px-4">
+              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-4 w-20" />
+            </div>
           </div>
         )}
 
